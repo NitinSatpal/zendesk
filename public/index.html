@@ -1,0 +1,92 @@
+<!DOCTYPE>
+<html ng-app = "myApp">
+	<!-- bootstrap -->
+	<link rel="stylesheet" href="./css/bootstrap.min.css">
+	<link rel="stylesheet" href="./css/bootstrap-theme.min.css">
+
+	<script src="js/jquery.min.js"></script>
+	<script src="js/bootstrap.min.js"></script>
+	<script src="https://ajax.googleapis.com/ajax/libs/angularjs/1.5.0/angular.min.js"></script>
+	<script src="controllers/zendeskController.js"></script>
+	<script src="select2/dist/js/select2.min.js"></script>
+	
+	<link rel="stylesheet" href="./select2/dist/css/select2.min.css">
+	<title> Zendesk API </title>
+</head>
+
+	<body>
+		<div class = "container" ng-controller="zendeskController as vm">
+			<div class="col-md-12 text-center">
+				<h1> Welcome to Zendesk API </h1>
+			</div>
+
+			<div class="col-md-12 text-center">
+				<form class="form-horizontal" novalidate>
+					<ul class="nav nav-tabs nav-tabs-horizontal" id="addProductabs">
+						<li class="active">
+							<a data-toggle="tab" href="#createTicket" id="tours_bd_Selector">Create Ticket</a>
+						</li>
+						<li>
+							<a data-toggle="tab" href="#fetchTicket" id="tours_pricing_Selector">Fetch Tickets</a>
+						</li>
+					</ul>
+					
+					<div class="tab-content" style="margin-top: 20px;">
+						<div id="createTicket" class="tab-pane fade in active">
+							<div class="col-md-8">
+								<div class="form-group">
+									<input type="text" class="form-control" name="subject" id="subject" placeholder="Subject" ng-model="vm.ticket.subject"/>
+								</div>
+								<div class="form-group">
+									<textarea class="form-control" name="comment" id="comment" placeholder="Comment" ng-model="vm.ticket.comment" ></textarea>
+								</div>
+								<div class="form-group">
+									<input type="text" class="form-control" name="serialNumber" id="serialNumber" placeholder="Serial Number" ng-model="vm.ticket.serialNumber" />
+								</div>
+							</div>
+							<div class="col-md-8 text-center">
+								<button class="btn btn-success" ng-click="vm.createTicket()">Create Ticket</button>
+							</div>
+						</div>
+
+						<div id="fetchTicket" class="tab-pane fade">
+							<div class="col-md-8">
+								<div class="form-group">
+									<select id="ticketFetching" name="ticketFetching" class="form-control" multiple="multiple" style="width:100%" ng-model="vm.ticketSerialNumbers">
+									</select>
+								</div>
+							</div>
+							<div class="col-md-8 text-center">
+								<button class="btn btn-success" ng-click="vm.fetchTickets()">Submit</button>
+							</div>
+							
+
+							<div class="col-md-8" style="margin-top: 50px;" ng-show="vm.tickets.length > 0">
+								<table class="table">
+									<thead>
+										<th>Subject</th>
+										<th>Comment</th>
+										<th>Serial Number</th>
+									</thead>
+									<tbody>
+										<tr ng-repeat="ticket in vm.tickets track by $index">
+											<td>{{ticket.subject}}</td>
+											<td>{{ticket.description}}</td>
+											<td>{{ticket.custom_fields[0].value}}</td>
+										</tr>
+									</tbody>
+								</table>
+							</div>
+						</div>
+					</div>
+				</form>
+			</div>
+		</div>
+		<script>
+			$("#ticketFetching").select2({
+		      	tags: true,
+		      	placeholder: "Type and Enter"
+		    });
+		</script>
+	</body>
+</html>
