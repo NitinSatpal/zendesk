@@ -45,14 +45,28 @@ app.post('/api/zendesk/ticket/create/', function (req, res) {
 });
 
 
-app.get('/api/zendesk/ticket/fetch/', function (req, res) {
-  zendesk.tickets.list().then(function(results){
-    if (results) {
-      res.status(200).json(results);
-    } else {
-      res.status(400).json('something went wrong');
-    }
-  });
+app.get('/api/zendesk/ticket/fetch/:status', function (req, res) {
+  console.log(req.params.status);
+  var query = '';
+  if (req.params.status != 'All') {
+    query = 'query=type:ticket status:' + req.params.status;
+    zendesk.search.list(query).then(function(results){
+      if (results) {
+        res.status(200).json(results);
+      } else {
+        res.status(400).json('something went wrong');
+      }
+    });
+  } else {
+    zendesk.tickets.list().then(function(results){
+      if (results) {
+        res.status(200).json(results);
+      } else {
+        res.status(400).json('something went wrong');
+      }
+    });
+  }
+  
 })
 
 app.listen(9000);
