@@ -14,20 +14,37 @@ app.controller('zendeskController', ['$scope', '$http', function($scope,$http) {
 	}
 
 	vm.fetchTickets = function () {
+		if ((!vm.ticketSerialNumbers || vm.ticketSerialNumbers.length == 0) && !vm.ticketStatus) {
+			alert('Please select at least one option');
+			return false;
+		}
+
+		console.log(vm.ticketStatus);
+		var status = '';
+		if (!vm.ticketStatus) 
+			status = 'All'
+		else
+			status = vm.ticketStatus;
+
 		vm.tickets = [];
-		$http.get('/api/zendesk/ticket/fetch/').success(function(response) {
-			console.log(response);
-			for (var index = 0; index < response.length; index++) {
-				for (var innerIndex = 0; innerIndex < vm.ticketSerialNumbers.length; innerIndex++) {
-					console.log(vm.ticketSerialNumbers[innerIndex]);
-					console.log(response[index].external_id);
-					if(vm.ticketSerialNumbers[innerIndex] == response[index].external_id) {
-						vm.tickets.push(response[index]);
+		$http.get('/api/zendesk/ticket/fetch/' +status).success(function(response) {
+			if (response.length == 0) {
+				vm.noTickets = true;
+			} else {
+				vm.noTickets = false;
+				if (!vm.ticketSerialNumbers || vm.ticketSerialNumbers.length == 0) {
+					vm.tickets = response;
+				} else {
+					for (var index = 0; index < response.length; index++) {
+						for (var innerIndex = 0; innerIndex < vm.ticketSerialNumbers.length; innerIndex++) {
+							if(vm.ticketSerialNumbers[innerIndex] == response[index].external_id) {
+								vm.tickets.push(response[index]);
+							}
+						}
 					}
 				}
 			}
-			
-			console.log(JSON.stringify(vm.tickets));
+			console.log(JSON.stringify(response));
 		}).error(function (err) {
 			alert(err)
 		});

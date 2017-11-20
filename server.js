@@ -10,9 +10,9 @@ var bodyParser = require('body-parser');
 var Zendesk = require('zendesk-node-api');
 
 var zendesk = new Zendesk({
-  url: 'https://upwork-testing.zendesk.com', // https://example.zendesk.com
-  email: 'nitinsatpal@gmail.com', // me@example.com
-  token: 'hi4goA89lgrkaJec55EKZpKxOHRZe2rGNV6jQNZa' // hfkUny3vgHCcV3UfuqMFZWDrLKms4z3W2f6ftjPT
+  url: '{your zendesk url}', // https://example.zendesk.com
+  email: '{your registered email id}', // me@example.com
+  token: '{your api token}' // hfkUny3vgHCcV3UfuqMFZWDrLKms4z3W2f6ftjPT
 });
 
 //server should search static resource
